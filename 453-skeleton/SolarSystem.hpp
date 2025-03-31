@@ -43,6 +43,8 @@ private:
     int mUnitCubeIndexCount{};
 
     std::unique_ptr<TurnTableCamera> mTurnTableCamera{};
+    glm::dvec2 mPreviousCursorPosition {};
+    bool mCursorPositionIsSetOnce = false;
 
     glm::mat4 mProjectionMatrix{};
 

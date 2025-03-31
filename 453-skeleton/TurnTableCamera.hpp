@@ -27,10 +27,8 @@ public:
 
     // void ChangeTarget(Transform & target);
 
-    // Responsible for rotation around y-axis.
     void ChangeTheta(float deltaTheta);
 
-    // Responsible for rotation around x-axis.
     void ChangePhi(float deltaPhi);
 
     void ChangeRadius(float deltaRadius);

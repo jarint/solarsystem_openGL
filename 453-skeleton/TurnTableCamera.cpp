@@ -10,12 +10,6 @@
 TurnTableCamera::TurnTableCamera(/*Transform & target*/)
     : TurnTableCamera(/*target, */Params{})
 {
-    // Temporary code, This is not the correct way to do it.
-    _position = glm::vec3(0.0f, 0.0f, -5.0f);
-    auto const translate = glm::translate(glm::identity<glm::mat4>(), _position);
-    auto const rotationY = glm::rotate(glm::identity<glm::mat4>(), glm::radians(20.0f), Math::UpVec3);
-    auto const rotationX = glm::rotate(glm::identity<glm::mat4>(), glm::radians(20.0f), Math::RightVec3);
-    _viewMatrix = translate * rotationX * rotationY;
 }
 
 //======================================================================================================================
@@ -60,7 +54,12 @@ void TurnTableCamera::UpdateViewMatrix()
     {
         _isDirty = false;
 
-        // TODO Calculate the camera position and the view matrix here
+        auto const hRot = glm::rotate(glm::mat4(1.0f), _theta, Math::UpVec3);
+        auto const vRot = glm::rotate(glm::mat4(1.0f), _phi, Math::RightVec3);
+
+        _position = glm::vec3(hRot * vRot * glm::vec4{Math::ForwardVec3, 0.0f}) * _distance;
+
+        _viewMatrix = glm::lookAt(_position, glm::vec3{}, Math::UpVec3);
     }
 }
 
@@ -68,21 +67,40 @@ void TurnTableCamera::UpdateViewMatrix()
 
 void TurnTableCamera::ChangeTheta(float const deltaTheta)
 {
-    // TODO
+    auto newTheta = _theta + deltaTheta;
+    if (newTheta != _theta)
+    {
+        _theta = newTheta;
+        _isDirty = true;
+    }
 }
 
 //======================================================================================================================
 
 void TurnTableCamera::ChangePhi(float const deltaPhi)
 {
-    // TODO
+    float const newPhi = std::clamp(
+        _phi + deltaPhi,
+        -glm::pi<float>() * 0.49f,
+        glm::pi<float>() * 0.49f
+    );
+    if (newPhi != _phi)
+    {
+        _isDirty = true;
+        _phi = newPhi;
+    }
 }
 
 //======================================================================================================================
 
 void TurnTableCamera::ChangeRadius(float const deltaRadius)
 {
-    // TODO
+    float const newDistance =  std::clamp(_distance + deltaRadius, _minDistance, _maxDistance);
+    if (newDistance != _distance)
+    {
+        _isDirty = true;
+        _distance = newDistance;
+    }
 }
 
 //======================================================================================================================

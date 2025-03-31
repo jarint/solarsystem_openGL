@@ -106,7 +106,19 @@ void SolarSystem::Run()
 void SolarSystem::Update(float const deltaTime)
 {
     auto const cursorPosition = mInputManager->CursorPosition();
-    // TODO Update camera here. Player should be able to hold the right mouse button and then move the camera with cursor positions changes
+
+    if (mCursorPositionIsSetOnce == true)
+    {
+        if (mInputManager->IsMouseButtonDown(GLFW_MOUSE_BUTTON_RIGHT) == true)
+        {
+            auto const deltaPosition = cursorPosition - mPreviousCursorPosition;
+            mTurnTableCamera->ChangeTheta(-static_cast<float>(deltaPosition.x) * mRotationSpeed * deltaTime);
+            mTurnTableCamera->ChangePhi(-static_cast<float>(deltaPosition.y) * mRotationSpeed * deltaTime);
+        }
+    }
+
+    mCursorPositionIsSetOnce = true;
+    mPreviousCursorPosition = cursorPosition;
 }
 
 //======================================================================================================================
@@ -116,7 +128,7 @@ void SolarSystem::Render()
     mBasicShader->use();
 
     glEnable(GL_CULL_FACE);  // Enable culling
-    glFrontFace(GL_CCW);
+    glFrontFace(GL_CCW);     
     glCullFace(GL_BACK);     // Cull back faces
 
     float const aspectRatio = static_cast<float>(mWindow->getWidth()) / static_cast<float>(mWindow->getHeight());
