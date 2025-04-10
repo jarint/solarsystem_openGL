@@ -1,12 +1,14 @@
 #version 330 core
 
-uniform sampler2D baseColorTexture;
-uniform sampler2D overlayColorTexture;
+in vec3 fragment_position;
+in vec2 texture_coordinates;
+in vec3 normal_vector;
 
-in vec3 outColor;
-out vec4 fragColor;
+uniform sampler2D texture_sampler;
+
+out vec4 output_color;
 
 void main()
 {
-	fragColor = vec4(outColor, 1.0f);
+    output_color = texture(texture_sampler, texture_coordinates);
 }

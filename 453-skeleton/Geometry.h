@@ -24,7 +24,7 @@ struct CPU_Geometry {
 	std::vector<Position> positions;
     std::vector<Color> colors;
 	std::vector<Normal> normals;
-    // std::vector<UV> uvs;             // You need the uv for texture mapping
+    std::vector<UV> uvs;             // You need the uv for texture mapping
     // std::vector<Index> indices;      // Index buffer (EBO) is needed for the bonuses
 };
 
@@ -47,13 +47,15 @@ private:
 
     void UpdateNormals(size_t count, Normal const * normals);
 
-	// void UpdateUVs(size_t count, UV const * uvs);
+	void UpdateUVs(size_t count, UV const * uvs);
 
     // void UpdateIndices(size_t count, Index const * indices);
 
 public:
 
     void Update(CPU_Geometry const & data);
+
+	int vertex_count() const;
 
 private:
 	// note: due to how OpenGL works, vao needs to be
@@ -63,9 +65,11 @@ private:
 	VertexBuffer positionsBuffer;
     VertexBuffer colorsBuffer;
     VertexBuffer normalsBuffer;
-	// VertexBuffer uvsBuffer;
+	VertexBuffer uvsBuffer;
 
     // IndexBuffer indexBuffer;
+
+	int m_vertex_count = 0;
 
 private:
 

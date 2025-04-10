@@ -7,6 +7,7 @@ GPU_Geometry::GPU_Geometry()
     , positionsBuffer(0, sizeof(Position) / sizeof(float), GL_FLOAT)
     , colorsBuffer(1, sizeof(Color) / sizeof(float), GL_FLOAT)
     , normalsBuffer(2, sizeof(Normal) / sizeof(float), GL_FLOAT)
+    , uvsBuffer(1, sizeof(UV) / sizeof(float), GL_FLOAT)
 {
 }
 
@@ -27,10 +28,10 @@ void GPU_Geometry::UpdateNormals(size_t const count, Normal const *normals)
     normalsBuffer.uploadData(sizeof(Normal) * count, normals, GL_STATIC_DRAW);
 }
 
-// void GPU_Geometry::UpdateUVs(size_t const count, UV const * uvs)
-// {
-// TODO
-// }
+void GPU_Geometry::UpdateUVs(size_t const count, UV const * uvs)
+{
+    uvsBuffer.uploadData(sizeof(UV) * count, uvs, GL_STATIC_DRAW);
+}
 
 // void GPU_Geometry::UpdateIndices(size_t const count, Index const *indices)
 // {
@@ -44,13 +45,20 @@ void GPU_Geometry::Update(CPU_Geometry const &data)
     // Sanity check to make sure the positions, normals and color have equal sizes.
     assert(data.positions.size() == data.normals.size());
     assert(data.positions.size() == data.colors.size());
-    // assert(data.positions.size() == data.uvs.size());
+    assert(data.positions.size() == data.uvs.size());
 
     UpdatePositions(data.positions.size(), data.positions.data());
     UpdateColors(data.colors.size(), data.colors.data());
     UpdateNormals(data.normals.size(), data.normals.data());
-    // UpdateUVs(data.uvs.size(), data.uvs.data());
+    UpdateUVs(data.uvs.size(), data.uvs.data());
+
+    m_vertex_count = static_cast<int>(data.positions.size());
     // UpdateIndices(data.indices.size(), data.indices.data());
+}
+
+int GPU_Geometry::vertex_count() const
+{
+    return m_vertex_count;
 }
 
 //======================================================================================================================

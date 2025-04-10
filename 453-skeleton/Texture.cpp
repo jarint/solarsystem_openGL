@@ -11,6 +11,8 @@ Texture::Texture(std::string path, GLint interpolation)
 	stbi_set_flip_vertically_on_load(true);
 	const char* pathData = path.c_str();
 	unsigned char* data = stbi_load(pathData, &width, &height, &numComponents, 0);
+	std::cout << "[Texture] Loading " << path << ": "
+          << width << "x" << height << ", channels=" << numComponents << std::endl;
 	if (data != nullptr)
 	{
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);		//Set alignment to be 1
@@ -39,7 +41,6 @@ Texture::Texture(std::string path, GLint interpolation)
 		};
 		//Loads texture data into bound texture
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, interpolation);

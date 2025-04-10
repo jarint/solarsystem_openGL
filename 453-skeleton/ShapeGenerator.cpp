@@ -6,14 +6,85 @@
 
 #include <glm/ext/matrix_transform.hpp>
 
+#include <iostream>
+
 //======================================================================================================================
 
-// CPU_Geometry ShapeGenerator::Sphere(float const radius, int const slices, int const stacks)
-// {
-//     CPU_Geometry geom{};
-//     // TODO
-//     return geom;
-// }
+CPU_Geometry ShapeGenerator::Sphere(float const radius, int const slices, int const stacks)
+{
+    CPU_Geometry geometry{};
+
+    float phi_step = glm::pi<float>() / static_cast<float>(stacks);
+    float theta_step = glm::two_pi<float>() / static_cast<float>(slices);
+
+    for (int stack_index = 0; stack_index < stacks; ++stack_index)
+    {
+        float phi = stack_index * phi_step;
+        float next_phi = (stack_index + 1) * phi_step;
+
+        for (int slice_index = 0; slice_index < slices; ++slice_index)
+        {
+            float theta = slice_index * theta_step;
+            float next_theta = (slice_index + 1) * theta_step;
+
+            glm::vec3 vertex_1 = glm::vec3(
+                -cos(theta) * sin(phi),
+                -cos(phi),
+                sin(theta) * sin(phi)
+            ) * radius;
+
+            glm::vec3 vertex_2 = glm::vec3(
+                -cos(next_theta) * sin(phi),
+                -cos(phi),
+                sin(next_theta) * sin(phi)
+            ) * radius;
+
+            glm::vec3 vertex_3 = glm::vec3(
+                -cos(next_theta) * sin(next_phi),
+                -cos(next_phi),
+                sin(next_theta) * sin(next_phi)
+            ) * radius;
+
+            glm::vec3 vertex_4 = glm::vec3(
+                -cos(theta) * sin(next_phi),
+                -cos(next_phi),
+                sin(theta) * sin(next_phi)
+            ) * radius;
+
+            // First triangle
+            geometry.positions.push_back(vertex_1);
+            geometry.positions.push_back(vertex_2);
+            geometry.positions.push_back(vertex_3);
+
+            // Second triangle
+            geometry.positions.push_back(vertex_1);
+            geometry.positions.push_back(vertex_3);
+            geometry.positions.push_back(vertex_4);
+
+            // Normals
+            geometry.normals.push_back(vertex_1);
+            geometry.normals.push_back(vertex_2);
+            geometry.normals.push_back(vertex_3);
+            geometry.normals.push_back(vertex_1);
+            geometry.normals.push_back(vertex_3);
+            geometry.normals.push_back(vertex_4);
+
+            // Texture coordinates
+            geometry.uvs.push_back(glm::vec2(theta / glm::two_pi<float>(), phi / glm::pi<float>()));
+            geometry.uvs.push_back(glm::vec2(next_theta / glm::two_pi<float>(), phi / glm::pi<float>()));
+            geometry.uvs.push_back(glm::vec2(next_theta / glm::two_pi<float>(), next_phi / glm::pi<float>()));
+
+            geometry.uvs.push_back(glm::vec2(theta / glm::two_pi<float>(), phi / glm::pi<float>()));
+            geometry.uvs.push_back(glm::vec2(next_theta / glm::two_pi<float>(), next_phi / glm::pi<float>()));
+            geometry.uvs.push_back(glm::vec2(theta / glm::two_pi<float>(), next_phi / glm::pi<float>()));
+        }
+    }
+
+    // Fill dummy white color to satisfy GPU_Geometry::Update assertions
+    geometry.colors.resize(geometry.positions.size(), glm::vec3(1.0f, 1.0f, 1.0f));
+
+    return geometry;
+}
 
 //======================================================================================================================
 
