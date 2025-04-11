@@ -42,8 +42,7 @@ private:
     std::shared_ptr<InputManager> mInputManager{};
 
     std::unique_ptr<ShaderProgram> mBasicShader{};
-    std::unique_ptr<ShaderProgram> m_phong_shader;
-    std::unique_ptr<ShaderProgram> m_unlit_shader;
+    std::unique_ptr<ShaderProgram> phong_shader{};
 
     std::unique_ptr<GPU_Geometry> mUnitCubeGeometry;
     int mUnitCubeIndexCount{};
@@ -56,18 +55,22 @@ private:
 
     float mFovY = 120.0f;
     float mZNear = 0.01f;
-    float mZFar = 100.0f;
+    float mZFar = 500.0f;
     float mZoomSpeed = 20.0f;
     float mRotationSpeed = 0.25f;
 
+    // 
     std::vector<std::unique_ptr<CelestialBody>> m_bodies;
     CelestialBody* m_sun = nullptr;
     CelestialBody* m_stars = nullptr;
+    // below not used in my current submission, 
+    // but setup just in case.
     CelestialBody* m_earth = nullptr;
+    CelestialBody* m_clouds = nullptr;
     CelestialBody* m_moon = nullptr;
 
     // animation control
-    float m_animation_speed = 1.0f;
-    bool m_paused = false;
-    bool m_reset = false;
+    float animation_speed = 1.0f;
+    bool paused = false;
+    bool reset = false;
 };

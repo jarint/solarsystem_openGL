@@ -14,10 +14,16 @@ out vec3 normal_vector;
 
 void main()
 {
+    // transform to world space
     vec4 model_pos = model_matrix * vec4(vertex_position, 1.0);
-    fragment_position = vec3(model_pos);                    
-    texture_coordinates = vertex_texture_coordinates;       
+    fragment_position = vec3(model_pos); 
+
+    // pass texture coords                   
+    texture_coordinates = vertex_texture_coordinates;
+
+    // transforms the normal to world space       
     normal_vector = vec3(model_matrix * vec4(vertex_normal, 0.0)); 
 
+    // final position
     gl_Position = projection_matrix * view_matrix * model_pos;     
 }

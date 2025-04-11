@@ -55,7 +55,7 @@ public:
 
     void Update(CPU_Geometry const & data);
 
-	int vertex_count() const;
+	int vertex_count() const; // return num of vertices (used in glDrawArrays)
 
 private:
 	// note: due to how OpenGL works, vao needs to be
@@ -69,7 +69,7 @@ private:
 
     // IndexBuffer indexBuffer;
 
-	int m_vertex_count = 0;
+	int m_vertex_count = 0; // current number of verts in the geometry
 
 private:
 

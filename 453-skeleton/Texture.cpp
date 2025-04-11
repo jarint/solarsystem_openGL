@@ -11,8 +11,7 @@ Texture::Texture(std::string path, GLint interpolation)
 	stbi_set_flip_vertically_on_load(true);
 	const char* pathData = path.c_str();
 	unsigned char* data = stbi_load(pathData, &width, &height, &numComponents, 0);
-	std::cout << "[Texture] Loading " << path << ": "
-          << width << "x" << height << ", channels=" << numComponents << std::endl;
+
 	if (data != nullptr)
 	{
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);		//Set alignment to be 1

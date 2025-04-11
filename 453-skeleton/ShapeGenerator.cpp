@@ -10,28 +10,34 @@
 
 //======================================================================================================================
 
+// will be called inside Celestial body class.
 CPU_Geometry ShapeGenerator::Sphere(float const radius, int const slices, int const stacks)
 {
     CPU_Geometry geometry{};
 
-    float phi_step = glm::pi<float>() / static_cast<float>(stacks);
-    float theta_step = glm::two_pi<float>() / static_cast<float>(slices);
+    // calculate the step size in sphereical coordinates
+    float phi_step = glm::pi<float>() / static_cast<float>(stacks); // latitude
+    float theta_step = glm::two_pi<float>() / static_cast<float>(slices); // longitude
 
+    // loop over vertical divisions
     for (int stack_index = 0; stack_index < stacks; ++stack_index)
     {
         float phi = stack_index * phi_step;
         float next_phi = (stack_index + 1) * phi_step;
 
+        // loop over horizontal divisions
         for (int slice_index = 0; slice_index < slices; ++slice_index)
         {
             float theta = slice_index * theta_step;
             float next_theta = (slice_index + 1) * theta_step;
 
+            // four vertices for a quad - converting spherical coords (theta, phi)
+            // to x,y,z cartesian coords
             glm::vec3 vertex_1 = glm::vec3(
-                -cos(theta) * sin(phi),
-                -cos(phi),
-                sin(theta) * sin(phi)
-            ) * radius;
+                -cos(theta) * sin(phi),     // x
+                -cos(phi),                  // y
+                sin(theta) * sin(phi)       // z
+            ) * radius;                     // scale
 
             glm::vec3 vertex_2 = glm::vec3(
                 -cos(next_theta) * sin(phi),
@@ -51,17 +57,18 @@ CPU_Geometry ShapeGenerator::Sphere(float const radius, int const slices, int co
                 sin(theta) * sin(next_phi)
             ) * radius;
 
-            // First triangle
+            // two triangles per quad on the sphere surface
+            // winding order 1-2-3
             geometry.positions.push_back(vertex_1);
             geometry.positions.push_back(vertex_2);
             geometry.positions.push_back(vertex_3);
 
-            // Second triangle
+            // winding order 1-3-4
             geometry.positions.push_back(vertex_1);
             geometry.positions.push_back(vertex_3);
             geometry.positions.push_back(vertex_4);
 
-            // Normals
+            // normals
             geometry.normals.push_back(vertex_1);
             geometry.normals.push_back(vertex_2);
             geometry.normals.push_back(vertex_3);
@@ -69,7 +76,7 @@ CPU_Geometry ShapeGenerator::Sphere(float const radius, int const slices, int co
             geometry.normals.push_back(vertex_3);
             geometry.normals.push_back(vertex_4);
 
-            // Texture coordinates
+            // Texture coordinates using spherical projection (u = theta/2pi, v = phi/pi)
             geometry.uvs.push_back(glm::vec2(theta / glm::two_pi<float>(), phi / glm::pi<float>()));
             geometry.uvs.push_back(glm::vec2(next_theta / glm::two_pi<float>(), phi / glm::pi<float>()));
             geometry.uvs.push_back(glm::vec2(next_theta / glm::two_pi<float>(), next_phi / glm::pi<float>()));
@@ -80,7 +87,8 @@ CPU_Geometry ShapeGenerator::Sphere(float const radius, int const slices, int co
         }
     }
 
-    // Fill dummy white color to satisfy GPU_Geometry::Update assertions
+    // geometry assertions won't pass unless I add this - basically just a dummy white colour.
+    // The necessary expected size is same as geometry.positions. These arent used in shading.
     geometry.colors.resize(geometry.positions.size(), glm::vec3(1.0f, 1.0f, 1.0f));
 
     return geometry;
