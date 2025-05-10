@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15.0)
-project(cpsc453-solarsystem)
+project(solarsystem)
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/modules/" ${CMAKE_MODULE_PATH})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -98,17 +98,17 @@ endif()
 
 # Compile our main application
 file(GLOB SOURCES
-    453-skeleton/*
+    src/*
 	${IMGUI_CPP_FILES}
 )
 set(INCLUDES ${INCLUDES} src)
-set(APP_NAME "cpsc453-solarsystem")
+set(APP_NAME "solarsystem")
 
 add_compile_definitions("ASSET_DIR=${CMAKE_SOURCE_DIR}/assets")
 
 add_executable(${APP_NAME} ${SOURCES}
-		453-skeleton/ShapeGenerator.cpp
-		453-skeleton/ShapeGenerator.hpp)
+		src/ShapeGenerator.cpp
+		src/ShapeGenerator.hpp)
 target_include_directories(${APP_NAME} PRIVATE ${INCLUDES})
 target_link_libraries(${APP_NAME} ${LIBRARIES})
 target_compile_definitions(${APP_NAME} PRIVATE ${DEFINITIONS})

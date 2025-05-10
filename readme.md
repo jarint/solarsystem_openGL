@@ -7,7 +7,7 @@ Platform: MacOS
 2. ```cd build```
 3. ```cmake ..```
 4. ```make```
-5. ```./cpsc453-solarsystem```
+5. ```./solarsystem```
 
 on visual studio I guess you can just hit the play button. 
 
