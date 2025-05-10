@@ -1,7 +1,3 @@
-//
-// Created by moham on 3/15/2025.
-//
-
 #include "ShapeGenerator.hpp"
 
 #include <glm/ext/matrix_transform.hpp>
