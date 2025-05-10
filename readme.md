@@ -1,6 +1,5 @@
-## CPSC-453: Solar system
+## Solar system simulator in OpenGL
 Name: Jarin Thundathil
-UCID: 10149776
 Platform: MacOS 
 
 ### TO RUN:
@@ -34,5 +33,3 @@ Window:
 
 Note: I don't use ImGUI to control this, but I kept the FPS counter anyways.
 
-### COMPLETED COMPONENTS
-The base assignment is completed.
