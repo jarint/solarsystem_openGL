@@ -277,8 +277,8 @@ void SolarSystem::UI()
 
 // Setup all the celestial bodies in the scene.
 // I removed and replaced the old PrepareUnitSphereGeometry();
-// method from the provided skeleton. I made a custom class 
-// CelestialBody to handle sphere properties instead
+// method. I made a custom class CelestialBody to
+// handle sphere properties instead
 
 // basically just declare the bodies, initialize geometries,
 // pass in texture filepath names and then set the basic properties 
@@ -329,7 +329,6 @@ void SolarSystem::PrepareSphereGeometry()
 
     // looked into getting the cloud rendering working, but
     // I don't think I'll have time to get transparency working
-    //before submission.
     // EARTH CLOUDS
     // auto earth_clouds = std::make_unique<CelestialBody>();
     // earth_clouds->initialize_geometry(1.0f, 40, 40);
