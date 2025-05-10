@@ -1,7 +1,3 @@
-//
-// Created by mohammad on 27/01/25.
-//
-
 #include "Time.hpp"
 
 #include <chrono>
